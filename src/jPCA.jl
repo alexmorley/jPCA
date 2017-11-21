@@ -16,10 +16,11 @@ type JPCA
 end
 
 """
-    fit(jpca::Type{JPCA}, X, k=size(X,2))
+    fit(jpca::Type{JPCA}, X, k=10 or num features)
 NB: X should be a time X features array.
 """
-function fit(jpca::Type{JPCA}, X, k=size(X,2))
+function fit(jpca::Type{JPCA}, X, k=size(X,2) < 10 ? size(X,2) : 10)
+    size(X,2) > size(X,1) && error("Must have more rows than columns")
     k > size(X,2) && error("k must be <= the number of columns in X")
     
     pca   = fit(PCA, X, pratio=1., maxoutdim=k)
