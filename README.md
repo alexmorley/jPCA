@@ -1,9 +1,12 @@
 # jPCA
 Julia implementation of jPCA - a PCA variant that captures rotational dynamics
+
 Original methods are shown in [Neural population dynamics during reaching. Churchland ... Shenoy 2012](https://images.nature.com/original/nature-assets/nature/journal/v487/n7405/extref/nature11129-s1.pdf)
 
+and matlab code at [Churchland Lab Site](http://churchlandlab.neuroscience.columbia.edu/links.html)
+
 # Requirements
-- Should fit into JuliaStats Framework. i.e. main call should be `fit!(JPCA::Type, X)`
+- Should fit into JuliaStats Framework. i.e. main call should be `fit(JPCA::Type, X)
 
 # Steps:
 1. PCA (optional): reduce the dimensionality of the space so as not to capture rotational dynamics with very low varaince.
