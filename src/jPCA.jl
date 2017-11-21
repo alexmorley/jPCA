@@ -5,6 +5,7 @@ export fit, JPCA
 using MultivariateStats,Optim
 
 include("reshape_skew.jl")
+include("getRealVs.jl")
 
 import MultivariateStats.fit
 
@@ -22,7 +23,8 @@ NB: X should be a time X features array.
 function fit(jpca::Type{JPCA}, X, k=size(X,2) < 10 ? size(X,2) : 10)
     size(X,2) > size(X,1) && error("Must have more rows than columns")
     k > size(X,2) && error("k must be <= the number of columns in X")
-    
+	isodd(k) && error("k must be even")   
+ 
     pca   = fit(PCA, X, pratio=1., maxoutdim=k)
     X2    = pca.proj[:,1:k]
     
@@ -32,8 +34,22 @@ function fit(jpca::Type{JPCA}, X, k=size(X,2) < 10 ? size(X,2) : 10)
     M = dX2/X2[Tpre,:]
 
     Mskew = skewsymregress(dX2, X2[Tpre,:]) 
+    D,V   = eig(Mskew)
+    V     .= V[:,sortperm(abs.(D))]
 
-    JPCA(pca, M, Mskew, NaN)
+    jPCs = zeros(size(V)...)
+	for pair in 1:3
+		vi1 = 1+2(pair-1)
+		vi2 = 2pair
+
+		VconjPair  = V[:, [vi1,vi2]]
+		evConjPair = D[[vi1, vi2]]
+		jPCs[:,vi1] .= getRealVs(VconjPair, evConjPair)[1]
+		jPCs[:,vi2] .= getRealVs(VconjPair, evConjPair)[2]
+    end
+	proj = pca.proj * jPCs 
+
+    JPCA(pca, M, Mskew, proj)
 end
 
 function skewsymregress(dX,X)
