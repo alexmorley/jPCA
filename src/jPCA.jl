@@ -38,7 +38,7 @@ function fit(jpca::Type{JPCA}, X, k=size(X,2) < 10 ? size(X,2) : 10)
     V     .= V[:,sortperm(abs.(D))]
 
     jPCs = zeros(size(V)...)
-	for pair in 1:3
+    for pair in 1:div(k,2)
 		vi1 = 1+2(pair-1)
 		vi2 = 2pair
 
