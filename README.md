@@ -1,3 +1,6 @@
+## READ THIS:
+** Work in Progress. I'm almost 100% sure this isn't correct yet! You have been warned! **
+
 # jPCA
 Julia implementation of jPCA - a PCA variant that captures rotational dynamics
 
